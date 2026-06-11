@@ -2,8 +2,9 @@ name: Trigger Vercel Deploy Hook
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -14,7 +15,7 @@ jobs:
         env:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
-          curl -X POST "$VERCEL_DEPLOY_HOOK"
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK"
           echo "Vercel deploy hook triggered."
       - name: Skip if Hook URL is missing
         if: ${{ env.VERCEL_DEPLOY_HOOK == '' }}
